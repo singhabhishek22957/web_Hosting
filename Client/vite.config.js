@@ -1,10 +1,22 @@
+// import { defineConfig } from 'vite'
+// import react from '@vitejs/plugin-react'
+
+// // https://vite.dev/config/
+// export default defineConfig({
+//   plugins: [react()],
+// })
+
+
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
-  build: {
-    outDir: 'dist' // <-- Make sure this matches what Vercel expects
+  server:{
+    proxy: {
+      // '/api':'http://localhost:5000',
+      // '/api':'https://abhishek-website-i74a.onrender.com',
+    },
   },
-  base: './' // <-- Required if you're deploying under a subpath or want relative URLs
+  plugins: [react()],
 })
