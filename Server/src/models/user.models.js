@@ -13,10 +13,60 @@ const userSchema = new Schema(
       required: true,
       unique: true,
     },
+    avatarUrl:{
+      type:String
+
+    },
     password: {
       type: String,
       required: true,
     },
+    refreshToken: {
+      type: String,
+    },
+    phoneNumber: {
+      type: [String],
+      required: true,
+    },
+    address: {
+      addressId: {
+        type: Schema.Types.ObjectId,
+        ref: "Address",
+        required: true,
+      },
+      addressType:{
+        type:String,
+        enum:['work','home','other'],
+        default:'home'
+      },
+      landmark:{
+        type:String
+      },
+      addressLine1:{
+        type:String
+      },
+      addressLine2:{
+        type:String
+      },
+      flatNumber:{
+        type:String
+      },
+      dateOfBirth: {
+        type: Date,
+      },
+      gender: {
+        type: String,
+        enum: ["male", "female", "other"],
+        default: "other",
+      },
+      occupation: {
+        type: String,
+      },
+      socialLinks: {
+        type: [String],
+      },
+
+    },  
   },
   { timestamps: true }
 );
@@ -34,19 +84,18 @@ userSchema.methods.generateAccessToken = function () {
   );
 };
 
-
 // password encryption
-userSchema.pre("save", async function(next){
-    if(!this.isModified("password")) return;
-    this.password = await bcrypt.hash(this.password,10);
-    next();
-})
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return;
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
+});
 
-// compare Password 
+// compare Password
 
-userSchema.methods.comparePassword = async function(password){
-    return await bcrypt.compare(password,this.password);
-}
+userSchema.methods.comparePassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
 
 // generate refresh token
 userSchema.methods.generateRefreshToken = function () {
